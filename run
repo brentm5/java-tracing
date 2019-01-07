@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+if [ ! -f dd-java-agent.jar ]; then
+  wget -O dd-java-agent.jar 'https://search.maven.org/remote_content?g=com.datadoghq&a=dd-java-agent&v=LATEST'
+fi
+
+# Add the following to log traces
+# -Ddd.writer.type=LoggingWriter \
+
+java -javaagent:dd-java-agent.jar \
+  -Ddd.service.name=trace-example \
+  -Ddd.agent.host=localhost \
+  -jar target/test-1.0-SNAPSHOT-shaded.jar
+
