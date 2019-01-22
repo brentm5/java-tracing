@@ -5,15 +5,15 @@ import datadog.trace.api.interceptor.MutableSpan;
 import io.opentracing.Scope;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 import java.util.UUID;
 
 abstract class AbstractRunner implements Runnable {
 
-    private static Logger logger = LogManager.getLogger(AbstractRunner.class);
+    private static Logger logger = LoggerFactory.getLogger(AbstractRunner.class);
     private final Tracer tracer = GlobalTracer.get();
 
     public void run(){

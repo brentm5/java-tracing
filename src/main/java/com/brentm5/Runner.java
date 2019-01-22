@@ -1,29 +1,31 @@
 package com.brentm5;
 
 import datadog.trace.api.Trace;
-import io.opentracing.Tracer;
-import io.opentracing.util.GlobalTracer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Runner extends AbstractRunner implements FancyRunner {
 
-    private static Logger logger = LogManager.getLogger(Runner.class);
-    private final Tracer tracer = GlobalTracer.get();
+    private static Logger logger = LoggerFactory.getLogger(Runner.class);
 
     @Trace
     @Override
     protected void consume(String message) {
-        String threadId = String.format("Thread: %s", Thread.currentThread().getId());
         try {
             Thread.sleep(getRandomInt(1000));
-            fancify(String.format("%s - %s", threadId, message));
+            fancify(message);
         } catch (Exception e) {
+            notifyError(e);
         }
     }
 
     @Override
     public void fancify(String message) {
         logger.info(message);
+    }
+
+    private void notifyError(Exception e) {
+        logger.error("Error with message", e);
+
     }
 }
