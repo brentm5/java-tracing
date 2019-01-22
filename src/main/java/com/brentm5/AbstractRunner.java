@@ -1,6 +1,7 @@
 package com.brentm5;
 
 import datadog.trace.api.Trace;
+import datadog.trace.api.interceptor.MutableSpan;
 import io.opentracing.Scope;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
@@ -32,6 +33,9 @@ abstract class AbstractRunner implements Runnable {
     private void handleMessage(String message) {
         try {
             consume(message);
+            if (tracer != null && tracer.activeSpan() != null) {
+                ((MutableSpan)tracer.activeSpan()).getRootSpan().setError(true);
+            }
         } catch (Exception e) {
         }
     }
